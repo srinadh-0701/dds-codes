@@ -1,0 +1,24 @@
+// Online C++ compiler to run C++ program online
+#include <iostream>
+using namespace std;
+#define size 5
+int stack[size];
+int top=-1;
+void push(int val){
+    if (top < size-1){
+        top++;
+        stack[top]=val;
+        cout<<val<<"inserted successfully"<<endl;
+    }
+    else{
+        cout<<"stack is overflow"<<endl;
+    }
+    }
+int main(){
+    push(10);
+    push(20);
+    push(30);
+    push(40);
+    push(50);
+    push(60);
+}
