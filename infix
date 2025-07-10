@@ -1,0 +1,82 @@
+#include<iostream>
+#include <ctype.h> //isalphanum
+using namespace std;
+#define size 100
+int stack[size];
+int top = -1;
+void push(char c){
+top++;
+stack[top] = c;
+}
+
+int precedene(char c){
+if(c=='^'){
+return 3;
+}
+else if(c== '/' || c=='*'){
+return 2;
+}
+else if(c == '+' || c=='-'){
+return 1;
+}
+else{
+return 0;
+}
+}
+
+
+void infixToPostFix(char infix[], char postfix[]){
+int i=0;
+int j=0;
+while(infix[i]!='\0'){
+char ch = infix[i];
+// Case 1: Operand (letter or digit) → Push to postfix.
+if(isalnum(ch)){ //can check a character is alphabet or numeric and return true or false
+postfix[j] = ch;
+j++;
+}
+// Case 2: '(' (Opening Bracket) → Push to stack.
+else if(ch == '('){
+push(ch);
+}
+// Case 3: ')' (Closing Bracket) → Pop from stack and push into postfix until '(' is found, then remove '('.
+else if(ch == ')'){
+while(stack[top]!='('){
+char popped = stack[top];
+postfix[j] = popped;
+top--;
+j++;
+}
+top--;
+}
+// Case 4: Operator (+, -, *, /, ^):
+// - If stack is empty, push operator in stack.
+// - Else, pop from stack and push to postfix while stack[top] has higher or equal precedence.
+// - Push the current operator after loop end.
+else{
+while(top!=-1 && precedene(stack[top]) >= precedene(ch) ){
+char popped = stack[top];
+postfix[j] = popped;
+j++;
+top--;
+}
+push(ch);
+}
+i++;
+}
+// Case-5 or step4 : After the infix expression ends:Pop all remaining elements from the stack.Push them into the
+// postfix expression
+while(top!=-1){
+postfix[j] = stack[top];
+top--;
+j++;
+}
+postfix[j] = '\0'; // '\0' means postfix array of characters end here
+}
+int main(){
+char infix[size], postfix[size];
+cout<<"enter the pattern : ";
+cin>>infix;
+infixToPostFix(infix, postfix);
+cout<<endl<<postfix;
+}
